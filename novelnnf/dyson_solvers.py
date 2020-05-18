@@ -296,3 +296,14 @@ def solver4_step(chain: object, om, rabi=0, dc=0.00001):
 
     return scV
 
+def solver3_step(chain: object, om, rabi=0, dc=0.00001):
+    noa = len(chain.zpos)
+    instate = chain.campl
+    oned = np.eye(noa, dtype=np.complex)
+
+    Sigma = super_matrix_small(chain, om)
+    omg = -om + rabi ** 2 / (4 * (om - dc)) - 0.5j
+    resolvent = (omg - 1.) * oned + Sigma
+    scV = spsolve(resolvent, instate)
+
+    return scV

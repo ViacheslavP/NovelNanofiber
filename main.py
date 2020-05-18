@@ -2,9 +2,9 @@ import numpy as np
 #from matplotlib import pyplot as plt
 from novelnnf import atomic_state, new_echain, new_mchain, get_metrics, to_mathematica
 
-echain = new_echain(100, 1/2)
-mirror = new_mchain(100, 1/2)
-absorber = new_mchain(100, 1/2, random=True)
+echain = new_echain(10, 1/2)
+mirror = new_mchain(10, 1/2)
+absorber = new_mchain(10, 1/2, random=True)
 
 resonator = mirror - (echain - mirror)
 dumped_res = mirror + (echain + mirror)
