@@ -1,5 +1,5 @@
 import sys
-from scipy.sparse import lil_matrix, csr_matrix
+from scipy.sparse import lil_matrix, csr_matrix, eye
 from scipy.sparse.linalg import spsolve
 
 from .atomic_states import np
@@ -232,6 +232,7 @@ def super_matrix_ext(chain: object, omega):
             continue
     return csr_matrix(sm)
 
+
 def super_matrix_small(chain: object, omega):
     dm = sigma_matrix(chain, omega)
     noa = len(chain.zpos)
@@ -248,17 +249,20 @@ def super_matrix_small(chain: object, omega):
 
                 sm[initial, ne] = dm[initial, ne, 2, 2]  # Transition to rayleigh
 
+
 def solver4(chain: object, freqs, rabi=0, dc=0.00001):
     noa = len(chain.zpos)
     dim = noa + 2*noa*(noa-1)
     nof = len(freqs)
     instate = np.pad(chain.campl, (0, 2*noa*(noa-1)), 'constant', constant_values=(0, 0))
     scV = np.empty((dim, nof), dtype=np.complex)
-    oned = lil_matrix((dim, dim), dtype=np.complex)
-    oned = csr_matrix(oned, dtype=np.complex)
-
+    oned = eye(dim, dim, format='csr', dtype=np.complex)
+    lc = (chain.zpos[0] - chain.zpos[-1]) > 1e4
+    if not lc:
+        Sigma = super_matrix_ext(chain, 0)
     for i,om in enumerate(freqs):
-        Sigma = super_matrix_ext(chain, om)
+        if lc:
+            Sigma = super_matrix_ext(chain, om)
         omg = -om + rabi ** 2 / (4 * (om - dc)) - 0.5j
         resolvent = (omg - 1.) * oned + Sigma
         scV[:, i], exitCode = spsolve(resolvent, instate)
@@ -276,15 +280,14 @@ def solver4(chain: object, freqs, rabi=0, dc=0.00001):
         sys.stdout.write("\033[K")
     return scV
 
+
 def solver4_step(chain: object, om, rabi=0, dc=0.00001):
     noa = len(chain.zpos)
     dim = noa + 2*noa*(noa-1)
     instate = np.pad(chain.campl, (0, 2*noa*(noa-1)), 'constant', constant_values=(0, 0))
     assert len(instate) == dim
     scV = np.empty((dim), dtype=np.complex)
-    oned = lil_matrix((np.eye(dim)), dtype=np.complex)
-
-    oned = csr_matrix(oned, dtype=np.complex)
+    oned = eye(dim, dim, format='csr', dtype=np.complex)
 
     Sigma = super_matrix_ext(chain, om)
     omg = -om + rabi ** 2 / (4 * (om - dc)) - 0.5j
@@ -292,3 +295,4 @@ def solver4_step(chain: object, om, rabi=0, dc=0.00001):
     scV = spsolve(resolvent, instate)
 
     return scV
+
