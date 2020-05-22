@@ -1,7 +1,6 @@
-import sys
 from scipy.sparse import lil_matrix, csr_matrix, eye
 from scipy.sparse.linalg import spsolve
-
+from .utills import counter
 from .atomic_states import np
 from .atomic_states import atomic_state
 
@@ -248,7 +247,7 @@ def super_matrix_small(chain: object, omega):
                     ne += 1  # ne is excited atom position (true)
 
                 sm[initial, ne] = dm[initial, ne, 2, 2]  # Transition to rayleigh
-
+    return sm
 
 def solver4(chain: object, freqs, rabi=0, dc=0.00001):
     noa = len(chain.zpos)
@@ -274,10 +273,8 @@ def solver4(chain: object, freqs, rabi=0, dc=0.00001):
             elif exitCode < 0:
                 print('Something bad happened. Exitting...')
                 assert exitCode == 0
-        ist = 100 * (i + 1) / nof
-        sys.stdout.write("\r%d%%" % ist)
-        sys.stdout.flush()
-        sys.stdout.write("\033[K")
+        counter(i, nof)
+
     return scV
 
 
@@ -304,6 +301,6 @@ def solver3_step(chain: object, om, rabi=0, dc=0.00001):
     Sigma = super_matrix_small(chain, om)
     omg = -om + rabi ** 2 / (4 * (om - dc)) - 0.5j
     resolvent = (omg - 1.) * oned + Sigma
-    scV = spsolve(resolvent, instate)
+    scV = np.linalg.solve(resolvent, instate)
 
     return scV

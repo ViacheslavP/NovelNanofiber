@@ -7,6 +7,6 @@ from .dyson_solvers import solver4
 from .atomic_states import atomic_state
 from .atomic_states import new_echain
 from .atomic_states import new_mchain
-from .temporal_conversion import get_metrics
+from .temporal_conversion import get_temporal_metrics
 from .temporal_conversion import get_psi_temporal
-from .convertor import to_mathematica
+from .utills import to_mathematica
