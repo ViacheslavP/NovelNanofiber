@@ -19,7 +19,10 @@ class atomic_state(object):
         return self.merge_atomic_states(other, distance=0.25)
 
     def __mul__(self, other):
-        return self.merge_atomic_states(other, distance=1e10 / 780)
+        return self.merge_atomic_states(other, distance=1e8 / 780)
+
+    def __truediv__(self, other):
+        return self.merge_atomic_states(other, distance=1e8 / 780 + 1/4)
 
     def merge_atomic_states(self, bstate: object, distance, to_end=True) -> object:
         n1, n2 = self.noa, bstate.noa

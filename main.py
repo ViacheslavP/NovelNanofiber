@@ -10,21 +10,48 @@ resonator = mirror - (echain - mirror)
 dumped_res = mirror + (echain + mirror)
 env_res = absorber + (echain + absorber)
 large_resonator = mirror * (echain * mirror)
+large_resonator_of = mirror / (echain / mirror)
 
-time = np.linspace(-1,8,1000)
+openres = echain - (mirror + mirror)
+openres_dumped = echain + (mirror + mirror)
+openres_env = echain + (absorber + absorber)
+openres_large = echain * (mirror + mirror)
+openres_large_of= echain / (mirror + mirror)
+time = np.linspace(-1,8,2000)
 f_max = 100
 nof = 1000
 
 
 print('\n Dicke chain')
-Dicke, _ = get_temporal_metrics(echain, time, nof, f_max)
+#Dicke, _, _ = get_temporal_metrics(echain, time, nof, f_max)
 print('\n Rabi resonator')
-ResSq, ResP = get_temporal_metrics(resonator, time, nof, f_max)
+#ResSq, ResP = get_temporal_metrics(resonator, time, nof, f_max)
 print('\n Dumped resonator')
-DurSq, DurP = get_temporal_metrics(dumped_res, time, nof, f_max)
-print('\n Chain i environment')
-EnvSq, EnvP = get_temporal_metrics(env_res, time, nof, f_max)
+#DurSq, DurP = get_temporal_metrics(dumped_res, time, nof, f_max)
+print('\n Chain in environment')
+#EnvSq, EnvP = get_temporal_metrics(env_res, time, nof, f_max)
 print('\n Echo resonator')
-LarSq, LarP = get_temporal_metrics(large_resonator, time, nof, f_max)
+#LarSq, LarP = get_temporal_metrics(large_resonator, time, nof, f_max)
 
-to_mathematica('figures', time, ResSq, ResP, DurSq, DurP, EnvSq, EnvP, LarSq, LarP, Dicke, csvpath='data/18.05.20/')
+#to_mathematica('figures', time, ResSq, ResP, DurSq, DurP, EnvSq, EnvP, LarSq, LarP, Dicke, csvpath='data/18.05.20/')
+
+print('\n Dicke chain')
+#Dicke, _ = get_temporal_metrics(openres, time, nof, f_max)
+print('\n Rabi resonator')
+#ResSq, ResP = get_temporal_metrics(openres, time, nof, f_max)
+print('\n Dumped resonator')
+#DurSq, DurP = get_temporal_metrics(openres_dumped, time, nof, f_max)
+print('\n Chain i environment')
+EnvSq, EnvP, EnvIn = get_temporal_metrics(openres_env, time, nof, f_max)
+to_mathematica('openres_rnd', time, EnvSq, EnvP, EnvIn, csvpath='data/29.05.20')
+print('\n Echo resonator')
+#LarSq, LarP = get_temporal_metrics(openres_large, time, nof, f_max)
+
+#to_mathematica('figures_openres', time, ResSq, ResP, DurSq, DurP, EnvSq, EnvP, LarSq, LarP, Dicke, csvpath='data/18.05.20/')
+
+
+LarSq, LarP = get_temporal_metrics(large_resonator, time, nof, f_max)
+LarSq1, LarP1 = get_temporal_metrics(large_resonator_of, time, nof, f_max)
+
+to_mathematica('figures_distexp_1', time, LarSq, LarP, LarSq1, LarP1)
+
