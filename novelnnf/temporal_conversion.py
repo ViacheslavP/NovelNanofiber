@@ -44,6 +44,6 @@ def get_temporal_metrics(setup: object, time2, nof, f_max, solver='3'):
     setup_square = np.real(np.dot(np.conj(np.transpose(setup_td)), setup_td).diagonal())
     setup_init = abs(np.dot(np.conj(np.transpose(setup_td)), instate)) ** 2
     proj = np.diag(abs(instate))
-    setup_td = np.dot(proj, setup_td)
-    setup_inplace = np.real(np.dot(np.conj(np.transpose(setup_td)), setup_td).diagonal())
+    setup_p = np.dot(proj, setup_td)
+    setup_inplace = np.real(np.dot(np.conj(np.transpose(setup_p)), setup_p).diagonal())
     return setup_square, setup_init, setup_inplace  # p, p0, pa
