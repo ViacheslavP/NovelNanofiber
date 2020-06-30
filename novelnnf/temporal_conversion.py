@@ -47,3 +47,18 @@ def get_temporal_metrics(setup: object, time2, nof, f_max, solver='3'):
     setup_p = np.dot(proj, setup_td)
     setup_inplace = np.real(np.dot(np.conj(np.transpose(setup_p)), setup_p).diagonal())
     return setup_square, setup_init, setup_inplace  # p, p0, pa
+
+
+def get_pulses(setup: object, time2, nof, f_max, solver='3'):
+    t, setup_td = get_psi_temporal(setup, time2, nof, f_max, solver)
+    noa = len(setup.zpos)
+    if solver=='3':
+        leftstate = np.exp(-2j*np.pi* setup.zpos)
+        rightstate = np.exp(2j*np.pi* setup.zpos)
+
+        leftpulse = abs(np.dot(np.conj(np.transpose(setup_td)), leftstate)) ** 2
+        rightpulse = abs(np.dot(np.conj(np.transpose(setup_td)), rightstate)) ** 2
+    else:
+        raise ValueError("Solver hasn't been realized yet")
+    denominator = (leftpulse.max() + rightpulse.max())/2
+    return leftpulse/denominator, rightpulse/denominator

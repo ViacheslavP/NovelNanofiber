@@ -65,15 +65,15 @@ def sigma_matrix(chain: object, omega):
     zs = 2 * np.pi * chain.zpos
     noa = len(zs)
     rpos = np.asarray([[abs(zs[i] - zs[j]) for i in range(noa)] for j in range(noa)], dtype=np.complex)
-
-    D1 = RADIATION_MODES_MODEL * ((DDI * 1 - 1j * rpos - rpos ** 2) / ((rpos + np.identity(noa)) ** 3) \
-                                  * np.exp(1j * rpos)) * (np.ones(noa) - np.identity(noa))
+    rposf = (1/1.09) * rpos / (2 * np.pi) # (lambda_0 / lambda_wg)
+    D1 = RADIATION_MODES_MODEL * ((DDI * 1 - 1j * rposf - rposf ** 2) / ((rposf + np.identity(noa)) ** 3) \
+                                  * np.exp(1j * 2 * np.pi * rposf)) * (np.ones(noa) - np.identity(noa))
     D2 = RADIATION_MODES_MODEL * -1 * hbar * (
-            (DDI * 3 - 3 * 1j * rpos - rpos ** 2) / (((rpos + np.identity(noa)) ** 3) * np.exp(1j * rpos)))
+            (DDI * 3 - 3 * 1j * rposf - rposf ** 2) / (((rposf + np.identity(noa)) ** 3) * np.exp(1j * 2 * np.pi * rposf)))
 
     neigh = np.array(list(map(lambda x: x < L, rpos)), dtype=np.complex)
     Dz = +1 * 2j * np.pi * np.exp(1j * (1 + VPH / VG * omega * EPS) * rpos) * (1 / VG)
-    DzSub = -1 * 2j * np.pi * np.exp(1j * (rpos)) * (RADIATION_MODES_MODEL * neigh)
+    DzSub = -1 * 2j * np.pi * np.exp(2j * np.pi * (rposf)) * (RADIATION_MODES_MODEL * neigh)
     Di = np.zeros([noa, noa, 3, 3], dtype=np.complex)
 
     em = -E(R)
@@ -276,7 +276,6 @@ def solver4(chain: object, freqs, rabi=0, dc=0.00001):
         counter(i, nof)
 
     return scV
-
 
 def solver4_step(chain: object, om, rabi=0, dc=0.00001):
     noa = len(chain.zpos)

@@ -9,4 +9,5 @@ from .atomic_states import new_echain
 from .atomic_states import new_mchain
 from .temporal_conversion import get_temporal_metrics
 from .temporal_conversion import get_psi_temporal
+from .temporal_conversion import get_pulses
 from .utills import to_mathematica
