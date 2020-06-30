@@ -2,8 +2,8 @@ import numpy as np
 #from matplotlib import pyplot as plt
 from novelnnf import atomic_state, new_echain, new_mchain, get_temporal_metrics, to_mathematica, get_pulses
 
-noe = 10
-nom = 10
+noe = 100
+nom = 100
 
 echain = new_echain(noe, 1/2)
 mirror = new_mchain(nom, 1/2)
