@@ -29,55 +29,35 @@ f_max = 400
 nof = 4000
 
 
-print('\n Dicke chain')
-#Dicke, _, _ = get_temporal_metrics(echain, time, nof, f_max)
-print('\n Rabi resonator')
-#ResSq, ResP, ResIn = get_temporal_metrics(resonator, time, nof, f_max)
-#to_mathematica('figures_rabiexp_res', time, ResSq, ResP, ResIn , csvpath='data/06.06.20/')
-print('\n Dumped resonator')
-#DurSq, DurP = get_temporal_metrics(dumped_res, time, nof, f_max)
-print('\n Chain in environment')
-#EnvSq, EnvP, EnvIn = get_temporal_metrics(env_res, time, nof, f_max)
-#to_mathematica('res_rnd', time, EnvSq, EnvP, EnvIn, csvpath='data/29.05.20/')
-print('\n Echo resonator')
-#LarSq, LarP = get_temporal_metrics(large_resonator, time, nof, f_max)
-
-#to_mathematica('figures', time, ResSq, ResP, DurSq, DurP, EnvSq, EnvP, LarSq, LarP, Dicke, csvpath='data/18.05.20/')
 
 print('\n Dicke chain')
-#Dicke, _ = get_temporal_metrics(openres, time, nof, f_max)
-print('\n Rabi resonator')
-#ResSq, ResP, ResIn = get_temporal_metrics(openres, time, nof, f_max)
-#to_mathematica('figures_rabiexp_mir', time, ResSq, ResP, ResIn , csvpath='data/06.06.20/')
-print('\n Dumped resonator')
-#DurSq, DurP = get_temporal_metrics(openres_dumped, time, nof, f_max)
-print('\n Chain in environment')
-#EnvSq, EnvP, EnvIn = get_temporal_metrics(openres_env, time, nof, f_max)
-#to_mathematica('openres_rnd', time, EnvSq, EnvP, EnvIn, csvpath='data/29.05.20/')
-print('\n Echo resonator')
-#LarSq, LarP = get_temporal_metrics(openres_large, time, nof, f_max)
-
-#to_mathematica('figures_openres', time, ResSq, ResP, DurSq, DurP, EnvSq, EnvP, LarSq, LarP, Dicke, csvpath='data/18.05.20/')
-
-
-#LarSq, LarP, LarIn = get_temporal_metrics(large_resonator, time, nof, f_max)
-#LarSq1, LarP1, LarIn1 = get_temporal_metrics(large_resonator_of, time, nof, f_max)
-
-#to_mathematica('figures_distexp_5', time, LarSq, LarP, LarIn, LarSq1, LarP1, LarIn1, csvpath='data/06.06.20/')
-
-#Pulses
-
-print('\n Dicke chain')
+Dicke, DickeP, DickeIn = get_temporal_metrics(echain, time, nof, f_max)
 LeftDicke, RightDicke = get_pulses(echain, time, nof, f_max)
+to_mathematica('Dicke', time, Dicke, DickeP, DickeIn, LeftDicke, RightDicke, csvpath='data/07.08.20/')
 
-print('\n Collective')
-LeftCollective, RightCollective = get_pulses(dumped_res, time, nof, f_max)
 
-print('\n Two Wells')
-LeftTW, RightTW = get_pulses(resonator, time, nof, f_max)
+print('\n With collective state')
+CollSq, CollP, CollIn = get_temporal_metrics(dumped_res, time, nof, f_max)
+LeftColl, RightColl = get_pulses(dumped_res, time, nof, f_max)
+to_mathematica('Coll', time, CollSq, CollP, CollIn, LeftColl, RightColl, csvpath='data/07.08.20/')
 
-print('\n Mirror')
-LeftMir, RightMir = get_pulses(openres, time, nof, f_max)
+print('\n Single defect')
+SdSq, SdP, SdIn = get_temporal_metrics(openres, time, nof, f_max)
+LeftSd, RightSd = get_pulses(openres, time, nof, f_max)
+to_mathematica('Single_defect', time, SdSq, SdP, SdIn, LeftSd, RightSd, csvpath='data/07.08.20/')
 
-to_mathematica('figures_pulses_left', time, LeftDicke, LeftCollective, LeftTW, LeftMir, csvpath='data/06.06.20/')
-to_mathematica('figures_pulses_right', time, RightDicke, RightCollective, RightTW, RightMir, csvpath='data/06.06.20/')
+print('\n Two defects')
+TdSq, TdP, TdIn = get_temporal_metrics(resonator, time, nof, f_max)
+LeftTd, RightTd = get_pulses(resonator, time, nof, f_max)
+to_mathematica('Two_defects', time, TdSq, TdP, TdIn, LeftTd, RightTd, csvpath='data/07.08.20/')
+
+print('\n Absorbing from one side')
+AfosSq, AfosP, AfosIn = get_temporal_metrics(openres_env, time, nof, f_max)
+LeftAfos, RightAfos = get_pulses(openres_env, time, nof, f_max)
+to_mathematica('Afos', time, AfosSq, AfosP, AfosIn, LeftAfos, RightAfos, csvpath='data/07.08.20/')
+
+print('\n Absorbing env')
+AenvSq, AenvP, AenvIn = get_temporal_metrics(env_res, time, nof, f_max)
+LeftAenv, RightAenv = get_pulses(env_res, time, nof, f_max)
+to_mathematica('Aenv', time, AenvSq, AenvP, AenvIn, LeftAenv, RightAenv, csvpath='data/07.08.20/')
+

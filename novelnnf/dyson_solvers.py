@@ -110,6 +110,9 @@ def sigma_matrix(chain: object, omega):
     forward = np.outer(emfi, emfjc) + np.outer(epfi, epfjc)
     backward = np.outer(embi, embjc) + np.outer(epbi, epbjc)
 
+    gd = 1 + 8 * d00 * d00 * np.pi * ((1 / VG - 1 ) * (abs(em) ** 2 + abs(ep) ** 2 + abs(ez) ** 2) +  abs(ez) ** 2)
+
+
     for i in range(noa):
         for j in range(noa):
             """
@@ -171,6 +174,10 @@ def sigma_matrix(chain: object, omega):
             Di[i, j, 2, 1] += d01 * d00 * (-0 * D2[i, j]);
 
             Di[i, j, 2, 2] += d01 * d10 * (D1[i, j] - 0 * D2[i, j])
+
+
+            if i==j:
+                Di[i, i, :, :] = -0.5j*gd
 
     return Di
 
