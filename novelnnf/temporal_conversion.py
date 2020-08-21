@@ -60,5 +60,5 @@ def get_pulses(setup: object, time2, nof, f_max, solver='3'):
         rightpulse = abs(np.dot(np.conj(np.transpose(setup_td)), rightstate)) ** 2
     else:
         raise ValueError("Solver hasn't been realized yet")
-    denominator = (leftpulse.max() + rightpulse.max())/2
+    denominator = 1. # (leftpulse.max() + rightpulse.max())/2
     return leftpulse/denominator, rightpulse/denominator
